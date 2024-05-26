@@ -9,35 +9,32 @@ import Home from "./screens/HomeScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { user } = useAuth;
-  if (user) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+  const { user } = useAuth();
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={user ? "Home" : "SignUp"}>
+        {user ? (
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ headerShown: false }}
           />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } else {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="SignUp">
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+        ) : (
+          <>
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ headerShown: false }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
