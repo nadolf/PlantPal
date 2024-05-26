@@ -2,7 +2,8 @@ import { signOut } from "firebase/auth";
 import React from "react";
 import { TouchableOpacity, View, Text, SafeAreaView } from "react-native";
 
-export default function Home() {
+
+export default function Home({navigation}) {
   const handelLogout = async () => {
     await signOut(auth);
   };
