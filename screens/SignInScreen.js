@@ -19,9 +19,9 @@ export default function SignIn({ navigation }) {
     if (email && password) {
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        Alert.alert('Sign In Success', 'You have successfully signed in!');
+        console.log("Succesfully signed in!")
       } catch (err) {
-        Alert.alert('Sign In Error', err.message);
+        Alert.alert('Error', "Invalid email or password");
       }
     }
   };

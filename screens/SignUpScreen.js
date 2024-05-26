@@ -5,16 +5,11 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  doc,
-  setDoc,
-  GeoPoint,
-} from "firebase/firestore";
+import { getFirestore, doc, setDoc, GeoPoint } from "firebase/firestore";
 
 const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -43,9 +38,10 @@ const SignUp = ({ navigation }) => {
           location: new GeoPoint(location.latitude, location.longitude),
           plantCollection: plantCollection,
         });
-        console.log("User added!");
+        Alert.alert("Success!", "You have successfully signed up!");
       } catch (err) {
-        console.log("Error: ", err.message);
+        Alert.alert('Error', err.message);
+
       }
     }
   };
