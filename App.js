@@ -5,6 +5,7 @@ import useAuth from "./hooks/useAuth";
 import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import Home from "./screens/HomeScreen";
+import Scanner from "./screens/ScannerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,13 +14,20 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Home" : "SignUp"}>
+      <Stack.Navigator initialRouteName={user ? "Scanner" : "SignUp"}>
         {user ? (
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
+          <>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Scanner"
+              component={Scanner}
+              options={{ headerShown: false }}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
