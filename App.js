@@ -18,13 +18,13 @@ export default function App() {
         {user ? (
           <>
             <Stack.Screen
-              name="Home"
-              component={Home}
+              name="Scanner"
+              component={Scanner}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Scanner"
-              component={Scanner}
+              name="Home"
+              component={Home}
               options={{ headerShown: false }}
             />
           </>
