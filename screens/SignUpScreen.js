@@ -5,22 +5,47 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  Button,
 } from "react-native";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  GeoPoint,
+} from "firebase/firestore";
 
 const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
+  const [profilePic, setProfilePic] = useState("");
+  const [plantCollection, setPlantCollection] = useState([]);
 
   const handleSignUp = async () => {
     if (email && password) {
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const userId = userCredential.user.uid;
+
+        const firestore = getFirestore();
+        await setDoc(doc(firestore, "users", userId), {
+          username: username,
+          email: email,
+          profilePic: profilePic,
+          location: new GeoPoint(location.latitude, location.longitude),
+          plantCollection: plantCollection,
+        });
+        console.log("User added!");
       } catch (err) {
-        console.log("got error: ", err.message);
+        console.log("Error: ", err.message);
       }
     }
   };
@@ -46,8 +71,8 @@ const SignUp = ({ navigation }) => {
         <View>
           <Text>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text>Sign In</Text>
-        </TouchableOpacity>
+            <Text>Sign In</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
