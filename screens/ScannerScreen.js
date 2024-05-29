@@ -1,17 +1,19 @@
-import { PLANT_ID_API_KEY } from "@env";
 import React, { useState } from "react";
 import { View, TouchableOpacity, Text, Alert } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { styles } from "../styles/ScannerScreenStyles";
 import axios from "axios";
+import {PLANT_ID_API_KEY} from '@env'
 
 export default function Scanner({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
+  const [identifiedPlant, setIdentifiedPlant] = useState(null);
+
 
   if (!permission) {
-    return <View/>;
+    return <View/>
   }
 
   if (!permission.granted) {
@@ -66,6 +68,7 @@ export default function Scanner({ navigation }) {
         );
         const plantData = response.data;
         console.log(JSON.stringify(plantData, null, 2));
+        setIdentifiedPlant(plantData.result.classification.suggestions[0].name);
       } catch (error) {
         console.error(error);
       }
@@ -81,6 +84,13 @@ export default function Scanner({ navigation }) {
           </TouchableOpacity>
         </View>
       </CameraView>
+      {identifiedPlant && (
+        <View>
+          <Text style={styles.text}>
+            Identified Plant: {identifiedPlant}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
