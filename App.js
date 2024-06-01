@@ -7,6 +7,7 @@ import SignIn from "./screens/SignInScreen";
 import Home from "./screens/HomeScreen";
 import Scanner from "./screens/ScannerScreen";
 import ChatBot from "./screens/ChatBotScreen";
+import PlantCollection from "./screens/PlantCollectionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,11 @@ export default function App() {
       <Stack.Navigator initialRouteName={user ? "ChatBot" : "SignUp"}>
         {user ? (
           <>
+            <Stack.Screen
+              name="PlantCollection"
+              component={PlantCollection}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="ChatBot"
               component={ChatBot}
