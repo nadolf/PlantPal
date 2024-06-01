@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Button,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { db, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -92,10 +93,14 @@ export default function PlantCollection({ navigation }) {
 
   const renderItem = ({ item }) => (
     <SafeAreaView>
-      <View style={styles.itemContainer}>
-        <Text>{item}</Text>
-        <Button title="Delete" onPress={() => deletePlant(item)} />
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ProgressTracker", { plant: item })}
+      >
+        <View style={styles.itemContainer}>
+          <Text>{item}</Text>
+          <Button title="Delete" onPress={() => deletePlant(item)} />
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 
