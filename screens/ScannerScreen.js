@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, Text, Alert } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { styles } from "../styles/ScannerScreenStyles";
+import { auth, db } from "../firebase";
 import axios from "axios";
-import {PLANT_ID_API_KEY} from '@env'
+import { PLANT_ID_API_KEY } from "@env";
+import {
+  getDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
 export default function Scanner({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
@@ -11,9 +17,8 @@ export default function Scanner({ navigation }) {
   const [image, setImage] = useState(null);
   const [identifiedPlant, setIdentifiedPlant] = useState(null);
 
-
   if (!permission) {
-    return <View/>
+    return <View />
   }
 
   if (!permission.granted) {
@@ -68,9 +73,38 @@ export default function Scanner({ navigation }) {
         );
         const plantData = response.data;
         console.log(JSON.stringify(plantData, null, 2));
-        setIdentifiedPlant(plantData.result.classification.suggestions[0].name);
+        const plantName = plantData.result.classification.suggestions[0].name;
+        setIdentifiedPlant(plantName);
+        await addIdentifiedPlantToCollection(plantName);
       } catch (error) {
         console.error(error);
+      }
+    }
+  };
+
+  const addIdentifiedPlantToCollection = async (plantName) => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const plantCollectionRef = doc(db, "users", user.uid);
+        const PlantDoc = await getDoc(plantCollectionRef);
+        if (PlantDoc.exists()) {
+          const plantData = PlantDoc.data();
+          const updatedPlantCollection = [
+            ...plantData.plantCollection,
+            plantName,
+          ];
+          await updateDoc(plantCollectionRef, {
+            plantCollection: updatedPlantCollection
+          });
+          Alert.alert(
+            "Success",
+            `${plantName} has been added to your collection.`
+          );
+        }
+      } catch (error) {
+        console.error("Error adding plant to collection: ", error);
+        Alert.alert("Error", "Error adding plant to collection.");
       }
     }
   };
@@ -86,9 +120,7 @@ export default function Scanner({ navigation }) {
       </CameraView>
       {identifiedPlant && (
         <View>
-          <Text style={styles.text}>
-            Identified Plant: {identifiedPlant}
-          </Text>
+          <Text style={styles.text}>Identified Plant: {identifiedPlant}</Text>
         </View>
       )}
     </View>

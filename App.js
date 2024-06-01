@@ -17,15 +17,20 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "ChatBot" : "SignUp"}>
+      <Stack.Navigator initialRouteName={user ? "Scanner" : "SignUp"}>
         {user ? (
           <>
+            <Stack.Screen
+              name="Scanner"
+              component={Scanner}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="PlantCollection"
               component={PlantCollection}
               options={{ headerShown: false }}
             />
-                        <Stack.Screen
+            <Stack.Screen
               name="ProgressTracker"
               component={ProgressTracker}
               options={{ headerShown: false }}
@@ -33,11 +38,6 @@ export default function App() {
             <Stack.Screen
               name="ChatBot"
               component={ChatBot}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Scanner"
-              component={Scanner}
               options={{ headerShown: false }}
             />
             <Stack.Screen
