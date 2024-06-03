@@ -4,11 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import useAuth from "./hooks/useAuth";
 import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
-import Home from "./screens/HomeScreen";
-import Scanner from "./screens/ScannerScreen";
-import ChatBot from "./screens/ChatBotScreen";
-import PlantCollection from "./screens/PlantCollectionScreen";
 import ProgressTracker from "./screens/ProgressTrackerScreen";
+import BottomTabNavigator from "./components/BottomNavigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,32 +14,17 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Scanner" : "SignUp"}>
+      <Stack.Navigator initialRouteName={user ? "BottomNav" : "SignUp"}>
         {user ? (
           <>
             <Stack.Screen
-              name="Scanner"
-              component={Scanner}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="PlantCollection"
-              component={PlantCollection}
+              name="BottomNav"
+              component={BottomTabNavigator}
               options={{ headerShown: false }}
             />
             <Stack.Screen
               name="ProgressTracker"
               component={ProgressTracker}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChatBot"
-              component={ChatBot}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Home"
-              component={Home}
               options={{ headerShown: false }}
             />
           </>
