@@ -12,11 +12,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc, GeoPoint } from "firebase/firestore";
 
 const SignUp = ({ navigation }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [location, setLocation] = useState({ latitude: 0, longitude: 0 });
-  const [profilePic, setProfilePic] = useState("");
   const [plantCollection, setPlantCollection] = useState([]);
 
   const handleSignUp = async () => {
@@ -32,16 +32,15 @@ const SignUp = ({ navigation }) => {
 
         const firestore = getFirestore();
         await setDoc(doc(firestore, "users", userId), {
+          firstName: firstName,
+          lastName: lastName,
           username: username,
           email: email,
-          profilePic: profilePic,
-          location: new GeoPoint(location.latitude, location.longitude),
           plantCollection: plantCollection,
         });
         Alert.alert("Success!", "You have successfully signed up!");
       } catch (err) {
-        Alert.alert('Error', err.message);
-
+        Alert.alert("Error", err.message);
       }
     }
   };
@@ -49,6 +48,16 @@ const SignUp = ({ navigation }) => {
   return (
     <SafeAreaView>
       <View>
+        <TextInput
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+        <TextInput
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
+        />
         <TextInput
           placeholder="Username"
           value={username}

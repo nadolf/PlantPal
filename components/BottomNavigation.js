@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ChatBot from "../screens/ChatBotScreen";
 import Scanner from "../screens/ScannerScreen";
 import PlantCollection from "../screens/PlantCollectionScreen";
+import Profile from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +29,8 @@ const BottomNav = (props) => {
             iconName = "scan-outline";
           } else if (route.name === "PlantCollection") {
             iconName = "leaf-outline";
+          } else if (route.name === "Profile") {
+            iconName = "people-outline";
           }
 
           return (
@@ -56,8 +59,6 @@ export default function BottomTabNavigator() {
   return (
     <Tab.Navigator
       tabBar={(props) => <BottomNav {...props} />}
-      screenOptions={({ route }) => ({
-      })}
     >
       <Tab.Screen
         name="ChatBot"
@@ -73,6 +74,11 @@ export default function BottomTabNavigator() {
         name="PlantCollection"
         component={PlantCollection}
         options={{ headerShown: false, tabBarLabel: "Garden" }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false, tabBarLabel: "Profile" }}
       />
     </Tab.Navigator>
   );

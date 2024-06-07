@@ -11,7 +11,6 @@ import {
 import { auth } from "../firebase";
 
 export default function SignIn({ navigation }) {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
