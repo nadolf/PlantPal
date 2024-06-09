@@ -1,24 +1,38 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, Text, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, Alert, Image } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { styles } from "../styles/ScannerScreenStyles";
 import { auth, db } from "../firebase";
 import axios from "axios";
 import { PLANT_ID_API_KEY } from "@env";
-import {
-  getDoc,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { getDoc, updateDoc, doc } from "firebase/firestore";
 
 export default function Scanner({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [identifiedPlant, setIdentifiedPlant] = useState(null);
+  const user = auth.currentUser;
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setProfileImage(userData.profileImage);
+        }
+      } catch (error) {
+        console.error("Error fetching profil image: ", error);
+      }
+    };
+
+    fetchProfileImage();
+  }, []);
 
   if (!permission) {
-    return <View />
+    return <View />;
   }
 
   if (!permission.granted) {
@@ -95,7 +109,7 @@ export default function Scanner({ navigation }) {
             plantName,
           ];
           await updateDoc(plantCollectionRef, {
-            plantCollection: updatedPlantCollection
+            plantCollection: updatedPlantCollection,
           });
           Alert.alert(
             "Success",
@@ -112,6 +126,11 @@ export default function Scanner({ navigation }) {
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} ref={(camera) => setCamera(camera)}>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          {profileImage && (
+            <Image source={{ uri: profileImage }} style={styles.image} />
+          )}
+        </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={takePicture}>
             <Text style={styles.text}>Camera</Text>

@@ -8,6 +8,7 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { db, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -17,6 +18,7 @@ export default function PlantCollection({ navigation }) {
   const [plantCollection, setPlantCollection] = useState([]);
   const [newPlant, setNewPlant] = useState("");
   const [loading, setLoading] = useState(true);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchUserPlants = async (userId) => {
@@ -24,6 +26,7 @@ export default function PlantCollection({ navigation }) {
         const userDoc = await getDoc(doc(db, "users", userId));
         if (userDoc.exists()) {
           const userData = userDoc.data();
+          setProfileImage(userData.profileImage);
           setPlantCollection(userData.plantCollection || []);
         }
         setLoading(false);
@@ -114,6 +117,11 @@ export default function PlantCollection({ navigation }) {
 
   return (
     <SafeAreaView>
+      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+        {profileImage && (
+          <Image source={{ uri: profileImage }} style={styles.image} />
+        )}
+      </TouchableOpacity>
       <View>
         <TextInput
           style={styles.input}
