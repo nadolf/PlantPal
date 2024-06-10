@@ -20,7 +20,6 @@ export default function Profile({navigation}) {
   const user = auth.currentUser;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
@@ -32,7 +31,6 @@ export default function Profile({navigation}) {
           const userData = userDoc.data();
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
-          setUsername(userData.username);
           setEmail(userData.email);
           setProfileImage(userData.profileImage);
         }
@@ -117,7 +115,6 @@ export default function Profile({navigation}) {
         {
           firstName,
           lastName,
-          username,
           email,
         },
         { merge: true }
@@ -156,12 +153,6 @@ export default function Profile({navigation}) {
           placeholder="Last Name"
           value={lastName}
           onChangeText={setLastName}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
           style={styles.input}
         />
         <TextInput
