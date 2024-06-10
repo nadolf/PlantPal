@@ -16,7 +16,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { styles } from "../styles/ProfileScreenStyles";
 
-export default function Profile() {
+export default function Profile({navigation}) {
   const user = auth.currentUser;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -178,6 +178,10 @@ export default function Profile() {
       </View>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Sign Out</Text>
+        <Button
+        title="Go Back"
+        onPress={() => navigation.goBack()}
+      />
       </TouchableOpacity>
     </SafeAreaView>
   );

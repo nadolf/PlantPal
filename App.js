@@ -6,6 +6,7 @@ import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import ProgressTracker from "./screens/ProgressTrackerScreen";
 import BottomTabNavigator from "./components/BottomNavigation";
+import Profile from "./screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ export default function App() {
             <Stack.Screen
               name="ProgressTracker"
               component={ProgressTracker}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={Profile}
               options={{ headerShown: false }}
             />
           </>

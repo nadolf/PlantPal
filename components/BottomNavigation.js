@@ -54,9 +54,7 @@ const BottomNav = (props) => {
 
 export default function BottomTabNavigator() {
   return (
-    <Tab.Navigator
-      tabBar={(props) => <BottomNav {...props} />}
-    >
+    <Tab.Navigator tabBar={(props) => <BottomNav {...props} />}>
       <Tab.Screen
         name="ChatBot"
         component={ChatBot}
