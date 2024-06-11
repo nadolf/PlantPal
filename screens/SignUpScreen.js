@@ -89,7 +89,7 @@ const SignUp = ({ navigation }) => {
               style={styles.googleImage}
               source={require("../assets/google_logo.png")}
             />
-            <Text style={styles.buttonText}>Sign In with Google</Text>
+            <Text style={styles.buttonText}>Sign Up with Google</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -101,7 +101,7 @@ const SignUp = ({ navigation }) => {
               style={styles.appleImage}
               source={require("../assets/apple_logo.png")}
             />
-            <Text style={styles.buttonText}>Sign In with Apple</Text>
+            <Text style={styles.buttonText}>Sign Up with Apple</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -113,7 +113,7 @@ const SignUp = ({ navigation }) => {
               style={styles.metaImage}
               source={require("../assets/meta_logo.png")}
             />
-            <Text style={styles.buttonText}>Sign In with Meta</Text>
+            <Text style={styles.buttonText}>Sign Up with Meta</Text>
           </View>
         </TouchableOpacity>
         <View style={styles.signInText}>
