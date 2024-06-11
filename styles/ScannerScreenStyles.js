@@ -30,5 +30,29 @@ export const styles = StyleSheet.create({
     borderRadius: 63,
     marginTop: 47,
     marginLeft: 10,
+    backgroundColor: 'gray'
+  },
+  cameraButton: {
+    width: 75,
+    aspectRatio: 1,
+    borderColor:'white',
+    borderWidth: 2,
+    borderRadius: '50%'
+  },
+  notificationButton: {
+    width: 46,
+    aspectRatio: 1,
+    backgroundColor:'white',
+    opacity: 0.5,
+    borderRadius: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: "12%"
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingEnd: 10
   },
 });

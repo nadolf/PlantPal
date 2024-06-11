@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Alert, Image } from "react-native";
+import { View, TouchableOpacity, Alert, Image } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { styles } from "../styles/ScannerScreenStyles";
 import { auth, db } from "../firebase";
 import axios from "axios";
 import { PLANT_ID_API_KEY } from "@env";
 import { getDoc, updateDoc, doc } from "firebase/firestore";
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default function Scanner({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
@@ -89,7 +90,17 @@ export default function Scanner({ navigation }) {
         console.log(JSON.stringify(plantData, null, 2));
         const plantName = plantData.result.classification.suggestions[0].name;
         setIdentifiedPlant(plantName);
-        await addIdentifiedPlantToCollection(plantName);
+        Alert.alert(plantName, "Want to add it to your garden?", [
+          {
+            text: "Close",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "Add",
+            onPress: () => addIdentifiedPlantToCollection(plantName),
+          },
+        ]);
       } catch (error) {
         console.error(error);
       }
@@ -111,10 +122,7 @@ export default function Scanner({ navigation }) {
           await updateDoc(plantCollectionRef, {
             plantCollection: updatedPlantCollection,
           });
-          Alert.alert(
-            "Success",
-            `${plantName} has been added to your collection.`
-          );
+          Alert.alert("Added", `${plantName} has been added to your garden.`);
         }
       } catch (error) {
         console.error("Error adding plant to collection: ", error);
@@ -126,22 +134,22 @@ export default function Scanner({ navigation }) {
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} ref={(camera) => setCamera(camera)}>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          {profileImage && (
-            <Image source={{ uri: profileImage }} style={styles.image} />
-          )}
-        </TouchableOpacity>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+            {profileImage && (
+              <Image source={{ uri: profileImage }} style={styles.image} />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.notificationButton}>
+            <Icon name="notifications-outline" size={24} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={takePicture}>
-            <Text style={styles.text}>Camera</Text>
+            <View style={styles.cameraButton}></View>
           </TouchableOpacity>
         </View>
       </CameraView>
-      {identifiedPlant && (
-        <View>
-          <Text style={styles.text}>Identified Plant: {identifiedPlant}</Text>
-        </View>
-      )}
     </View>
   );
 }

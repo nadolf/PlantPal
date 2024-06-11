@@ -63,7 +63,7 @@ export default function BottomTabNavigator() {
       <Tab.Screen
         name="Scanner"
         component={Scanner}
-        options={{ headerShown: false, tabBarLabel: "Scanner" }}
+        options={{ headerShown: false, tabBarLabel: "Scan" }}
       />
       <Tab.Screen
         name="PlantCollection"
