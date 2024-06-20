@@ -25,7 +25,7 @@ export default function Scanner({ navigation }) {
           setProfileImage(userData.profileImage);
         }
       } catch (error) {
-        console.error("Error fetching profil image: ", error);
+        console.error("Error fetching profile image: ", error);
       }
     };
 
@@ -136,8 +136,13 @@ export default function Scanner({ navigation }) {
       <CameraView style={styles.camera} ref={(camera) => setCamera(camera)}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-            {profileImage && (
+            {profileImage ? (
               <Image source={{ uri: profileImage }} style={styles.image} />
+            ) : (
+              <Image
+                source={require("../assets/defaultProfileIcon.png")}
+                style={styles.image}
+              />
             )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.notificationButton}>

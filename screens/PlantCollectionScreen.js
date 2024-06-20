@@ -5,20 +5,22 @@ import {
   Text,
   FlatList,
   SafeAreaView,
-  Button,
   TextInput,
   TouchableOpacity,
   Image,
 } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { db, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default function PlantCollection({ navigation }) {
   const [plantCollection, setPlantCollection] = useState([]);
+  const [filteredPlantCollection, setFilteredPlantCollection] = useState([]);
   const [newPlant, setNewPlant] = useState("");
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchUserPlants = async (userId) => {
@@ -28,6 +30,7 @@ export default function PlantCollection({ navigation }) {
           const userData = userDoc.data();
           setProfileImage(userData.profileImage);
           setPlantCollection(userData.plantCollection || []);
+          setFilteredPlantCollection(userData.plantCollection || []);
         }
         setLoading(false);
       } catch (error) {
@@ -62,6 +65,7 @@ export default function PlantCollection({ navigation }) {
             plantCollection: UpdatePlantCollection,
           });
           setPlantCollection(UpdatePlantCollection);
+          setFilteredPlantCollection(UpdatePlantCollection);
         }
       }
     } catch (error) {
@@ -86,6 +90,7 @@ export default function PlantCollection({ navigation }) {
             plantCollection: updatedPlantCollection,
           });
           setPlantCollection(updatedPlantCollection);
+          setFilteredPlantCollection(updatedPlantCollection);
           setNewPlant("");
         }
       }
@@ -94,16 +99,36 @@ export default function PlantCollection({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    const filtered = plantCollection.filter((plant) =>
+      plant.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredPlantCollection(filtered);
+  }, [searchQuery, plantCollection]);
+
   const renderItem = ({ item }) => (
     <SafeAreaView>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("ProgressTracker", { plant: item })}
-      >
-        <View style={styles.itemContainer}>
-          <Text>{item}</Text>
-          <Button title="Delete" onPress={() => deletePlant(item)} />
-        </View>
-      </TouchableOpacity>
+      <View style={styles.itemContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ProgressTracker", { plant: item })
+          }
+        >
+          <View style={styles.itemWapper}>
+            <Text style={styles.plantNameText}>{item}</Text>
+            <Image
+              source={require("../assets/plantImage.png")}
+              style={styles.plantImage}
+            />
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => deletePlant(item)}
+            >
+              <Icon name="trash" size={24} />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 
@@ -117,25 +142,43 @@ export default function PlantCollection({ navigation }) {
 
   return (
     <SafeAreaView>
-      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-        {profileImage && (
-          <Image source={{ uri: profileImage }} style={styles.image} />
-        )}
-      </TouchableOpacity>
-      <View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          {profileImage ? (
+            <Image source={{ uri: profileImage }} style={styles.image} />
+          ) : (
+            <Image
+              source={require("../assets/defaultProfileIcon.png")}
+              style={styles.image}
+            />
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.notificationButton}>
+          <Icon name="notifications-outline" size={24} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.searchBarContainer}>
         <TextInput
-          style={styles.input}
-          placeholder="Enter new plant"
-          value={newPlant}
-          onChangeText={setNewPlant}
-        />
-        <Button title="Add Plant" onPress={addPlant} />
-        <FlatList
-          data={plantCollection}
-          keyExtractor={(item) => item}
-          renderItem={renderItem}
+          placeholder="Search Plant"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          style={styles.searchBar}
         />
       </View>
+      <FlatList
+        data={filteredPlantCollection}
+        keyExtractor={(item) => item}
+        renderItem={renderItem}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter new plant"
+        value={newPlant}
+        onChangeText={setNewPlant}
+      />
+      <TouchableOpacity onPress={addPlant} style={styles.addButton}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

@@ -16,7 +16,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { styles } from "../styles/ProfileScreenStyles";
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const user = auth.currentUser;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -137,8 +137,13 @@ export default function Profile({navigation}) {
   return (
     <SafeAreaView>
       <Text>Profile</Text>
-      {profileImage && (
+      {profileImage ? (
         <Image source={{ uri: profileImage }} style={styles.image} />
+      ) : (
+        <Image
+          source={require("../assets/defaultProfileIcon.png")}
+          style={styles.image}
+        />
       )}
       <Button title="Edit Profile Picture" onPress={pickImage} />
       <Text>Profile Information</Text>
@@ -169,10 +174,7 @@ export default function Profile({navigation}) {
       </View>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Sign Out</Text>
-        <Button
-        title="Go Back"
-        onPress={() => navigation.goBack()}
-      />
+        <Button title="Go Back" onPress={() => navigation.goBack()} />
       </TouchableOpacity>
     </SafeAreaView>
   );

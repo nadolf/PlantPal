@@ -30,7 +30,6 @@ export const styles = StyleSheet.create({
     borderRadius: 63,
     marginTop: 47,
     marginLeft: 10,
-    backgroundColor: 'gray'
   },
   cameraButton: {
     width: 75,
