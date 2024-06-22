@@ -15,6 +15,7 @@ import { auth, storage, db } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { styles } from "../styles/ProfileScreenStyles";
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default function Profile({ navigation }) {
   const user = auth.currentUser;
@@ -136,7 +137,11 @@ export default function Profile({ navigation }) {
 
   return (
     <SafeAreaView>
-      <Text>Profile</Text>
+      <View>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="chevron-back" size={30} />
+        </TouchableOpacity>
+      </View>
       {profileImage ? (
         <Image source={{ uri: profileImage }} style={styles.image} />
       ) : (
@@ -146,35 +151,32 @@ export default function Profile({ navigation }) {
         />
       )}
       <Button title="Edit Profile Picture" onPress={pickImage} />
-      <Text>Profile Information</Text>
       <View>
         <TextInput
           placeholder="First Name"
           value={firstName}
           onChangeText={setFirstName}
-          style={styles.input}
+          style={styles.textInput}
         />
         <TextInput
           placeholder="Last Name"
           value={lastName}
           onChangeText={setLastName}
-          style={styles.input}
+          style={styles.textInput}
         />
         <TextInput
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
+          style={styles.textInput}
         />
-        <TouchableOpacity onPress={handleUpdateProfile}>
-          <Text>Update Profile</Text>
+        <TouchableOpacity style={styles.updateButton} onPress={handleUpdateProfile}>
+          <Text style={styles.updateButtonText}>Update Profile</Text>
         </TouchableOpacity>
-        <Text>Notifications</Text>
-        <Text>Dark/Light Mode</Text>
+        {/* <Text>Dark/Light Mode</Text> */}
       </View>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Sign Out</Text>
-        <Button title="Go Back" onPress={() => navigation.goBack()} />
+      <TouchableOpacity style={styles.signOutButton} onPress={handleLogout}>
+        <Text style={styles.signOutButtontText}>Sign Out</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
