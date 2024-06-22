@@ -68,7 +68,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: "50%",
     paddingHorizontal: 20,
-    height: 50
+    height: 50,
+
   },
   addButton: {
     width: 50,
@@ -79,12 +80,61 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "flex-end",
     bottom: "-40%",
-    
   },
   addButtonText: {
     color: "white",
     fontSize: 30,
     fontWeight: "300",
-
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: "black",
+    width: 80,
+    margin: 10,
+  },
+  buttonAdd: {
+    backgroundColor: "#B36540",
+    width: 80,
+    marginRight: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalTextInput: {
+    // borderColor: "gray",
+    paddingVertical: 10,
+    paddingHorizontal: 35,
+    borderRadius: "50%"
   }
 });

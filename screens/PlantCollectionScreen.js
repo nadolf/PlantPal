@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Modal,
+  Pressable,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { db, auth } from "../firebase";
@@ -21,6 +23,7 @@ export default function PlantCollection({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserPlants = async (userId) => {
@@ -170,15 +173,50 @@ export default function PlantCollection({ navigation }) {
         keyExtractor={(item) => item}
         renderItem={renderItem}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter new plant"
-        value={newPlant}
-        onChangeText={setNewPlant}
-      />
-      <TouchableOpacity onPress={addPlant} style={styles.addButton}>
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={styles.addButton}
+      >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TextInput
+                style={styles.modalTextInput}
+                placeholder="Enter new plant name"
+                value={newPlant}
+                onChangeText={setNewPlant}
+              />
+              <View style={styles.modalButtonContainer}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Close </Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonAdd]}
+                onPress={() => {
+                  addPlant();
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Add </Text>
+              </Pressable></View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 }
