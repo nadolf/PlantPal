@@ -40,10 +40,10 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
+    height: 50,
     backgroundColor: "white",
     borderRadius: "50%",
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   backButtonText: {
     fontSize: 30,

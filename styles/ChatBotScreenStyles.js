@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   messageContainer: {
     backgroundColor: "white",
     borderRadius: "30%",
-    height: "72%",
+    height: "70%",
     width: "90%",
     marginVertical: 15,
     alignSelf: "center",
@@ -72,10 +72,10 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
+    height: 50,
     backgroundColor: "white",
-    paddingLeft: 20,
-    borderRadius: 20,
+    paddingHorizontal: 20,
+    borderRadius: "50%",
     alignSelf: "center",
   },
   chatBotHeaderIcon: {

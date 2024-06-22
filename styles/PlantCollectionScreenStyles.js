@@ -67,7 +67,8 @@ export const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: "white",
     borderRadius: "50%",
-    padding: 20,
+    paddingHorizontal: 20,
+    height: 50
   },
   addButton: {
     width: 50,
