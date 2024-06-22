@@ -3,8 +3,12 @@
 
 A plant assistant app designed to help everyone from beginners to plant enthusiasts manage and care for their plants effectively.
 
-## Tech Stack
+## Demo
+https://github.com/nadolf/PlantPal/assets/96559304/a82bd6de-2e61-421c-a5a6-4ad2edafd07f
 
+
+
+## Tech Stack
 **Client:** React Native, JavaScript, Axios, Expo
 
 **Server:** Node.js, Express.js, Firebase
@@ -16,7 +20,6 @@ A plant assistant app designed to help everyone from beginners to plant enthusia
 * Track plant progress
 
 ## Environment Variables
-
 To run this project, you will need to add the following environment variables to your .env file
 
 `FIREBASE_API_KEY`
