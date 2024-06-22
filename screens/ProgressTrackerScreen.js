@@ -4,14 +4,23 @@ import {
   Text,
   FlatList,
   TextInput,
-  Button,
+  Image,
+  TouchableOpacity,
 } from "react-native";
 import { styles } from "../styles/ProgressTrackerScreenStyles";
+import Icon from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { auth, db } from "../firebase";
-import { collection, addDoc, getDocs, Timestamp, deleteDoc} from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  Timestamp,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
-export default ProgressTracker = ({ route }) => {
+export default ProgressTracker = ({ route, navigation }) => {
   const { plant } = route.params;
   const user = auth.currentUser;
   const [feed, setFeed] = useState([]);
@@ -71,31 +80,93 @@ export default ProgressTracker = ({ route }) => {
     }
   };
 
-  const deleteFeedItem = async () => {
+  const addWaterFeedItem = async () => {
+    if (!user) return;
+    const itemText = `${plant} was watered`;
+    try {
+      const plantFeedRef = collection(
+        db,
+        "users",
+        user.uid,
+        "plants",
+        plant,
+        "feed"
+      );
+      const newFeedDoc = await addDoc(plantFeedRef, {
+        text: itemText,
+        timestamp: Timestamp.now(),
+      });
+      setFeed([
+        ...feed,
+        { id: newFeedDoc.id, text: itemText, timestamp: Timestamp.now() },
+      ]);
+    } catch (error) {
+      console.error("Error adding preset feed item: ", error);
+    }
+  };
+
+  const addFertilizerFeedItem = async () => {
+    if (!user) return;
+    const itemText = `${plant} was fertilized`;
+    try {
+      const plantFeedRef = collection(
+        db,
+        "users",
+        user.uid,
+        "plants",
+        plant,
+        "feed"
+      );
+      const newFeedDoc = await addDoc(plantFeedRef, {
+        text: itemText,
+        timestamp: Timestamp.now(),
+      });
+      setFeed([
+        ...feed,
+        { id: newFeedDoc.id, text: itemText, timestamp: Timestamp.now() },
+      ]);
+    } catch (error) {
+      console.error("Error adding preset feed item: ", error);
+    }
+  };
+
+  const deleteFeedItem = async (id) => {
     if (!user) return;
     try {
-        const plantFeedRef = collection(
-            db,
-            "users",
-            user.uid,
-            "plants",
-            plant,
-            "feed",
-            id );
-            await deleteDoc(plantFeedRef);
-            setFeed(feed.filter( item => item.id !== id))
+      const feedDocRef = doc(
+        db,
+        "users",
+        user.uid,
+        "plants",
+        plant,
+        "feed",
+        id
+      );
+      await deleteDoc(feedDocRef);
+      setFeed(feed.filter((item) => item.id !== id));
     } catch (error) {
-        console.error("Error deleting feed item: ", error);
+      console.error("Error deleting feed item: ", error);
     }
-  }
+  };
 
   const renderItem = ({ item }) => {
-    const date = item.timestamp.toDate(); 
+    const date = item.timestamp.toDate();
+    const formattedDate = `${date.toDateString()} at ${date.toLocaleTimeString(
+      [],
+      { hour: "2-digit", minute: "2-digit" }
+    )}`;
     return (
       <View style={styles.feedItem}>
         <Text>{item.text}</Text>
-        <Text style={styles.timestamp}>{date.toDateString()}</Text>
-        <Button title="Delete" onPress={deleteFeedItem}/>
+        <View style={styles.ItemDateContainer}>
+          <Text style={styles.timestamp}>{formattedDate}</Text>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => deleteFeedItem(item.id)}
+          >
+            <Icon name="trash" size={24} />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -111,7 +182,9 @@ export default ProgressTracker = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Plant Feed</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Icon name="chevron-back" size={30} />
+        </TouchableOpacity>
         <Text style={styles.plantName}>{plant}</Text>
       </View>
       <FlatList
@@ -120,13 +193,30 @@ export default ProgressTracker = ({ route }) => {
         renderItem={renderItem}
         style={styles.feedList}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Add new feed item"
-        value={newFeedItem}
-        onChangeText={setNewFeedItem}
-      />
-      <Button title="Add Feed Item" onPress={addFeedItem} />
+      <View style={styles.additionalButtonsContainer}>
+      <TouchableOpacity style={styles.button} onPress={addWaterFeedItem}>
+        <Icon name="water-outline" size={24} color={"white"} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={addFertilizerFeedItem}>
+        <Image
+          style={styles.fertilizerIcon}
+          source={require("../assets/fertilizerIcon.png")}
+        />
+      </TouchableOpacity></View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Add new feed item"
+          value={newFeedItem}
+          onChangeText={setNewFeedItem}
+        />
+        <TouchableOpacity style={styles.button} onPress={addFeedItem}>
+          <Image
+            style={styles.sendIcon}
+            source={require("../assets/sendIcon.png")}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
